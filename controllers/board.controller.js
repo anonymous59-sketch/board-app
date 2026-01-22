@@ -40,7 +40,7 @@ const ctrl = {
     // console.log(req.params.id);
     const [rows, result] = await service.remove(req.params.id);
     if(rows) {
-      res.json(result);
+      res.send(result);
     } else {
       res.json({retCode : "NG"});
     }

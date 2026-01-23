@@ -9,11 +9,12 @@
 // 모듈 import
 const express = require('express');
 const boardRoute = require('./routes/board.route.js');
+const cors = require('cors');
 
 // 인스턴스 생성
 const app = express();
 app.use(express.json()); // body 영역의 데이터(json포맷)을 해석하고 처리할 수 있는 기능
-
+app.use(cors()); // cors 모듈을 사용해서 보안 정책에 대하여 허용
 // 라우팅 정보
 app.get('/', (req, res) => {
   res.send(`/경로 호출`);

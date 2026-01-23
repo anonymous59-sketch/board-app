@@ -3,9 +3,10 @@
 const pool = require('../db.js');
 
 const service = {
-  async findAll() {
+  async findAll(pg) {
     // pool이라는게 db.js를 확인해보면 promise로 받아오기때문에 비동기 처리방식이라는 것을 기억
-    let [rows, result] = await pool.query('SELECT * FROM board'); // 실행할 쿼리 입력 메서드
+    const offset = (pg - 1) * 7;
+    let [rows, result] = await pool.query('SELECT * FROM board ORDER BY 1 LIMIT 7 OFFSET ?', [offset]); // 실행할 쿼리 입력 메서드
     // console.log(rows);
     return rows;
   },
@@ -30,6 +31,12 @@ const service = {
     let [result, info] = await pool.query(`SELECT * FROM board`);
     // console.log(rows[0].affectedRows, result);
     return [rows[0].affectedRows, result];
+  },
+  async totalCount() {
+    let [rows, result] = await pool.query(`SELECT count(*) "cnt" FROM board`);
+    const dataLength = rows[0]['cnt'];
+    // console.log(dataLength);
+    return dataLength;
   }
 }
 module.exports = service;

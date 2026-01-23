@@ -5,9 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>박상원</title>
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/pageNum.css">
 </head>
 <body>
   <h3>박상원</h3>
+
   <!-- 글 작성 -->
   <div class="write-box">
     <input type="text" id="title" placeholder="제목" />
@@ -28,6 +30,18 @@
     </thead>
     <tbody id="boardList"></tbody>
   </table>
-<script src="js/board.js"></script>
+
+  <!-- 페이지 넘버 -->
+  <nav class="pagination">
+    <!-- <a href="#" class="page prev disabled">«</a>
+    <a href="#" class="page active">1</a>
+    <a href="#" class="page">2</a>
+    <a href="#" class="page">3</a>
+    <a href="#" class="page">4</a>
+    <a href="#" class="page">5</a>
+    <a href="#" class="page next">»</a> -->
+  </nav>
+
+<script type="module" src="js/board.js"></script>
 </body>
 </html>

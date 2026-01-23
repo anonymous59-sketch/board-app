@@ -8,12 +8,12 @@ router.get('/pg/:page', ctrl.list); // http://localhost:3000/boards/ 에 호출�
 
 router.get('/totalCount', ctrl.totalCount);
 
-router.post('/', ctrl.create);
+router.post('/addPost', ctrl.create);
 
 router.get('/detail/:id', ctrl.detail);
 
 router.put('/:id', ctrl.update);
 
-router.delete('/:id', ctrl.remove);
+router.delete('/delete/:id', ctrl.remove);
 
 module.exports = router;

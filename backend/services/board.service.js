@@ -28,9 +28,7 @@ const service = {
   },
   async remove(id) {
     let rows = await pool.query(`DELETE FROM board WHERE id = ${id}`);
-    let [result, info] = await pool.query(`SELECT * FROM board`);
-    // console.log(rows[0].affectedRows, result);
-    return [rows[0].affectedRows, result];
+    return [rows[0].affectedRows];
   },
   async totalCount() {
     let [rows, result] = await pool.query(`SELECT count(*) "cnt" FROM board`);

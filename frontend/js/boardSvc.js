@@ -1,5 +1,5 @@
 // boardSvc.js 모듈기능
-const API_URL = "http://192.168.0.16:3000/boards";
+const API_URL = "http://localhost:3000/boards";
 
 const svc = {
   getBoards(page, callback/* 함수 */) {
@@ -18,20 +18,29 @@ const svc = {
     )
   },
   
-  addPost(post = {}, callback) {
-    fetch(`${API_URL}`, {
-      method: post,
+  addPost(data = {}, callback) {
+    fetch(`${API_URL}/addPost`, {
+      method: 'post',
       headers:{'Content-Type': 'application/json'},
-      body:{
-        title: post.title,
-        content: post.content,
-        writer: post.writer
-      }
+      body: JSON.stringify({
+        title: data.title,
+        content: data.content,
+        writer: data.writer
+      })
     })
       .then(res => res.json())
       .then(callback)
       .catch(err => console.error(err))
-  }
+  },
+
+  deletePost(id, callback) {
+    fetch(`${API_URL}/delete/${id}`, {
+      method: 'delete'
+    })
+      .then(res => res.json())
+      .then(callback)
+      .catch(err => console.error(err));
+  },
   // formatDate(date) {
   // const year = date.getFullYear();
   // const month = date.getMonth() + 1;

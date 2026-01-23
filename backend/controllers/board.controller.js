@@ -41,11 +41,7 @@ const ctrl = {
     // console.log(req.params.id);
     const id = req.params.id
     const [rows, result] = await service.remove(id);
-    if(rows) {
-      res.send(result);
-    } else {
-      res.json({retCode : "NG"});
-    }
+    rows ? res.json({retCode: 1}) : res.json({retCond: 0});
   },
     
   totalCount: async (req, res) => {

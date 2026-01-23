@@ -14,38 +14,34 @@ const loadBoards = (page = 1) => {
           const td = document.createElement('td');
           if(col == 'created_at') {
             td.textContent = new Date(data[col]).toLocalFormat()
-            tr.appendChild(td);
           } else {
             td.textContent = data[col];
-            tr.appendChild(td);
-          }
+          } 
+          tr.appendChild(td);
         });
+        const td = document.createElement('td');
+        td.className = 'delete-column'
+        const delBtn = document.createElement('span');
+        delBtn.textContent = '삭제';
+        delBtn.className = 'delete-btn';
+        delBtn.setAttribute('data-del', `${data['id']}`);
+        delBtn.addEventListener('click', e => {
+          // console.log(e.target.dataset.del) 
+          const delNo = e.target.dataset.del;
+          const cb = result => {
+            // console.log(result);
+            const code = result.retCode;
+            code ? alert('삭제되었습니다.') : alert('삭제 중 오류가 발생했습니다.');
+            loadBoards(page);
+            loadPagingList();
+          };
+          svc.deletePost(delNo, cb)
+        })
+        td.appendChild(delBtn);
+        tr.appendChild(td);
         tbody.appendChild(tr);
       });
   });
-  // fetch(`${API_URL}/pg/${page}`)
-  //   .then(res=> res.json())
-  //   .then(result => {
-  //     // console.log(result);
-  //     const tbody = document.querySelector('#boardList');
-  //     tbody.innerHTML = '';
-  //     const fields = ["id", "title", "writer", "created_at"];
-  //     result.forEach(data => {
-  //       const tr = document.createElement('tr');
-  //       fields.forEach(col => {
-  //         const td = document.createElement('td');
-  //         if(col == 'created_at') {
-  //           td.textContent = new Date(data[col]).toLocalFormat()
-  //           tr.appendChild(td);
-  //         } else {
-  //           td.textContent = data[col];
-  //           tr.appendChild(td);
-  //         }
-  //       });
-  //       tbody.appendChild(tr);
-  //     });
-  //   })
-  //   .catch(err => console.error(err)
   //   // CORS => 동일한 출처만 허용하겠다는 보안상 정책
   //   // http(프로토콜), 호스트(localhost), port(3000, 5500)을 맞춰야함
   //   // app.js에 서버 요청 방식과 호스트 등등을 허용하는 코드를 집어넣거나 npm install cors를 설치하고 그 모듈을 사용하기
@@ -96,66 +92,11 @@ const loadPagingList = () => {
     nextBtn.setAttribute('data-page', endPage + 1);
     next ? nextBtn.classList.remove('disabled') : nextBtn.classList.add('disabled');
     pagination.appendChild(nextBtn);
-
   };
-
   svc.getTotalCount(cb);
-  // fetch(`${API_URL}/totalCount`)
-  //   .then(res => res.json())
-  //   .then(result => {
-  //     // console.log(result);
-  //     const totalCnt = result;
-  //     let endPage = Math.ceil(page / 5) * 5; 
-  //     let startPage = endPage - 4;
-  //     let realEndPage = Math.ceil(totalCnt / 7);
-  //     endPage = endPage > realEndPage ? realEndPage : endPage;
-  //     let prev = startPage == 1 ? false : true;
-  //     let next = endPage < realEndPage ? true : false;
-      
-  //     const prevBtn = document.createElement('a');
-  //     prevBtn.className = 'page prev';
-  //     prevBtn.textContent = '«';
-  //     prevBtn.setAttribute('href', '#');
-  //     prevBtn.setAttribute('data-page', startPage - 1);
-  //     prev ? prevBtn.classList.remove('disabled') : prevBtn.classList.add('disabled');
-  //     pagination.appendChild(prevBtn);
-
-  //     for(let pg = startPage; pg <= endPage; pg++) {
-  //       let aTag = document.createElement('a');
-  //       aTag.className = 'page';
-  //       aTag.setAttribute('href', '#');
-  //       aTag.textContent = pg;
-  //       aTag.setAttribute('data-page', pg);
-  //       if(pg == page) {
-  //         aTag.classList.add('active');
-  //       } else {
-  //         aTag.classList.remove('active');
-  //       }
-  //       pagination.appendChild(aTag);
-  //     }
-
-  //     const nextBtn = document.createElement('a');
-  //     nextBtn.className = 'page next';
-  //     nextBtn.textContent = '»';
-  //     nextBtn.setAttribute('href', '#');
-  //     nextBtn.setAttribute('data-page', endPage + 1);
-  //     next ? nextBtn.classList.remove('disabled') : nextBtn.classList.add('disabled');
-  //     pagination.appendChild(nextBtn);
-
-  //   })
-  //   .catch(err => console.error(err)
-  // );
 }
 loadPagingList();
 
-
-document.querySelectorAll('nav.pagination>a').forEach(elem => {
-  elem.addEventListener('click', e => {
-    const aTag = e.target;
-    const pageNum = aTag.innerText;
-    loadBoards(pageNum);
-  });
-});
 
 document.querySelector('nav.pagination').addEventListener('click', e => {
   if(e.target.tagName == 'A') {
@@ -173,8 +114,13 @@ window.createPost = function createPost() {
   const writer = document.querySelector('input#writer').value;
   const post = {title, content, writer}
   // console.log(post);
-  const cb = () => {
-
+  const cb = result => {
+    if(result){
+      loadBoards(page);
+      loadPagingList();
+    } else {
+      alert('데이터 생성 실패')
+    }
   }
   svc.addPost(post, cb);
 }

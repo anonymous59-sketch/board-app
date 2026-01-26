@@ -24,5 +24,5 @@ app.use('/boards', boardRoute); // 라우트를 사용하여 라우팅
 
 // 서버 생성
 app.listen(3000, () => {
-  console.log(`서버실행 http://localhost:3000`)
+  console.log(`서버실행 http://192.168.0.16:3000`)
 });

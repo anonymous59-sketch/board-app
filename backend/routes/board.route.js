@@ -8,12 +8,12 @@ router.get('/pg/:page', ctrl.list); // http://localhost:3000/boards/ 에 호출�
 
 router.get('/totalCount', ctrl.totalCount);
 
-router.post('/addPost', ctrl.create);
+router.post('/', ctrl.create);
 
 router.get('/detail/:id', ctrl.detail);
 
 router.put('/:id', ctrl.update);
 
-router.delete('/delete/:id', ctrl.remove);
+router.delete('/:id', ctrl.remove); // REST API에서 url은 최대한 통일하고 방식을 다르게 해서 url을 단순화하는게 RESTful방식의 권장되는 사항
 
 module.exports = router;

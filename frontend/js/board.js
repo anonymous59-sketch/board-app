@@ -4,43 +4,43 @@ import {svc} from './boardSvc.js'; // 모듈 불러오기 , 모듈사용하면 h
 
 const loadBoards = (page = 1) => {
   svc.getBoards(page, result => {
-      // console.log(result);
-      const tbody = document.querySelector('#boardList');
-      tbody.innerHTML = '';
-      const fields = ["id", "title", "writer", "created_at"];
-      result.forEach(data => {
-        const tr = document.createElement('tr');
-        fields.forEach(col => {
-          const td = document.createElement('td');
-          if(col == 'created_at') {
-            td.textContent = new Date(data[col]).toLocalFormat()
-          } else {
-            td.textContent = data[col];
-          } 
-          tr.appendChild(td);
-        });
+    // console.log(result);
+    const tbody = document.querySelector('#boardList');
+    tbody.innerHTML = '';
+    const fields = ["id", "title", "writer", "created_at"];
+    result.forEach(data => {
+      const tr = document.createElement('tr');
+      fields.forEach(col => {
         const td = document.createElement('td');
-        td.className = 'delete-column'
-        const delBtn = document.createElement('span');
-        delBtn.textContent = '삭제';
-        delBtn.className = 'delete-btn';
-        delBtn.setAttribute('data-del', `${data['id']}`);
-        delBtn.addEventListener('click', e => {
-          // console.log(e.target.dataset.del) 
-          const delNo = e.target.dataset.del;
-          const cb = result => {
-            // console.log(result);
-            const code = result.retCode;
-            code ? alert('삭제되었습니다.') : alert('삭제 중 오류가 발생했습니다.');
-            loadBoards(page);
-            loadPagingList();
-          };
-          svc.deletePost(delNo, cb)
-        })
-        td.appendChild(delBtn);
+        if(col == 'created_at') {
+          td.textContent = new Date(data[col]).toLocalFormat()
+        } else {
+          td.textContent = data[col];
+        } 
         tr.appendChild(td);
-        tbody.appendChild(tr);
       });
+      const td = document.createElement('td');
+      td.className = 'delete-column'
+      const delBtn = document.createElement('span');
+      delBtn.textContent = '삭제';
+      delBtn.className = 'delete-btn';
+      delBtn.setAttribute('data-del', `${data['id']}`);
+      delBtn.addEventListener('click', e => {
+        // console.log(e.target.dataset.del) 
+        const delNo = e.target.dataset.del;
+        const cb = result => {
+          // console.log(result);
+          const code = result.retCode;
+          code ? alert('삭제되었습니다.') : alert('삭제 중 오류가 발생했습니다.');
+          loadBoards(page);
+          loadPagingList();
+        };
+        svc.deletePost(delNo, cb)
+      })
+      td.appendChild(delBtn);
+      tr.appendChild(td);
+      tbody.appendChild(tr);
+    });
   });
   //   // CORS => 동일한 출처만 허용하겠다는 보안상 정책
   //   // http(프로토콜), 호스트(localhost), port(3000, 5500)을 맞춰야함
@@ -114,13 +114,26 @@ window.createPost = function createPost() {
   const writer = document.querySelector('input#writer').value;
   const post = {title, content, writer}
   // console.log(post);
+  if(!title || !content || !writer) {
+    alert('필수 값을 입력해주세요');
+    return;
+  }
+
   const cb = result => {
-    if(result){
+    // console.log(result.retCode);
+    if(result.retCode == 'OK'){
+      page = 1;
       loadBoards(page);
       loadPagingList();
     } else {
       alert('데이터 생성 실패')
     }
   }
+
   svc.addPost(post, cb);
+
+  document.querySelector('input#title').value = '';
+  document.querySelector('textarea#content').value = '';
+  document.querySelector('input#writer').value = '';
+  document.querySelector('input#title').focus();
 }

@@ -1,5 +1,5 @@
 // boardSvc.js 모듈기능
-const API_URL = "http://localhost:3000/boards";
+const API_URL = "http://192.168.0.16:3000/boards";
 
 const svc = {
   getBoards(page, callback/* 함수 */) {
@@ -19,14 +19,17 @@ const svc = {
   },
   
   addPost(data = {}, callback) {
-    fetch(`${API_URL}/addPost`, {
+    fetch(`${API_URL}`, {
       method: 'post',
       headers:{'Content-Type': 'application/json'},
-      body: JSON.stringify({
-        title: data.title,
-        content: data.content,
-        writer: data.writer
-      })
+      body: JSON.stringify(
+        data // 매개값이 객체형태로 들어오니까 중괄호 없이 바로 매개변수 입력
+        // {
+        // title: data.title,
+        // content: data.content,
+        // writer: data.writer
+        // }
+      )
     })
       .then(res => res.json())
       .then(callback)
@@ -34,7 +37,7 @@ const svc = {
   },
 
   deletePost(id, callback) {
-    fetch(`${API_URL}/delete/${id}`, {
+    fetch(`${API_URL}/${id}`, {
       method: 'delete'
     })
       .then(res => res.json())

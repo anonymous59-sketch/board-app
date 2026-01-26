@@ -15,7 +15,8 @@ const ctrl = {
     const param = req.body;
     // console.log(param);
     const result = await service.create(param);
-    res.send(result);
+    // console.log(result);
+    result ? res.json({retCode : "OK"}) : res.json({retCode : "NG"});
   },
 
   detail: async (req, res) => {
@@ -27,6 +28,7 @@ const ctrl = {
 
   update: async(req, res) => {
     // console.log(req.params.id, req.body);
+    const id = req.params.id;
     const {title, content} = req.body;
     const result = await service.update({id, title, content});
     // falsy : 0, null, "", undefined
@@ -40,8 +42,8 @@ const ctrl = {
   remove: async(req, res) => {
     // console.log(req.params.id);
     const id = req.params.id
-    const [rows, result] = await service.remove(id);
-    rows ? res.json({retCode: 1}) : res.json({retCond: 0});
+    const code = await service.remove(id);
+    code ? res.json({retCode: 1}) : res.json({retCond: 0});
   },
     
   totalCount: async (req, res) => {

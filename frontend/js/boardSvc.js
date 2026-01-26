@@ -1,5 +1,5 @@
 // boardSvc.js 모듈기능
-const API_URL = "http://192.168.0.16:3000/boards";
+const API_URL = "http://localhost:3000/boards";
 
 const svc = {
   getBoards(page, callback/* 함수 */) {

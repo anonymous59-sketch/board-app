@@ -16,6 +16,17 @@ const ctrl = {
     // console.log(req.body);
     // const data = req.body;
     // service.register(data);
+  },
+  async delete(req, res) {
+    const id = req.params.id;
+    try {
+      const result = await service.delete(id);
+      // console.log(result);
+      const errCode = result.affectedRows;
+      errCode ? res.json({retCode:'OK'}) : res.json({retCode: "NG"});
+    } catch(err) {
+      console.error(err);
+    }
   }
 }
 

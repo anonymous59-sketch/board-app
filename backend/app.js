@@ -9,7 +9,9 @@
 // 모듈 import
 const express = require('express');
 const boardRoute = require('./routes/board.route.js');
+const memberRoute = require('./routes/member.route.js');
 const cors = require('cors');
+
 
 // 인스턴스 생성
 const app = express();
@@ -21,6 +23,7 @@ app.get('/', (req, res) => {
 });
 
 app.use('/boards', boardRoute); // 라우트를 사용하여 라우팅
+app.use('/members', memberRoute); // 화원관리 라우팅
 
 // 서버 생성
 app.listen(3000, () => {
